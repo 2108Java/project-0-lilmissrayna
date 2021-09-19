@@ -1,18 +1,18 @@
 package com.views;
 
-import com.models.Account;
 import com.models.User;
+import com.service.EmployeeService;
 
 public class EmployeeMenu implements UserMenu {
 
-	@Override
-	public void options() {
-		// TODO Auto-generated method stub
-
+	EmployeeService employeeService;
+	
+	public EmployeeMenu(EmployeeService employeeService) {
+		this.employeeService = employeeService;
 	}
 
 	@Override
-	public void printAccount(Account account) {
+	public void options() {
 		// TODO Auto-generated method stub
 
 	}

@@ -1,8 +1,13 @@
 package com.service;
 
-import com.models.Account;
 
 public interface AdminService extends EmployeeService {
 	
-	public boolean changeAccount(Account account);
-}
+	boolean addUser(String username, String password, int userType, boolean approved);
+	boolean deleteUser(String username);
+	boolean updateUsername(String oldUser, String newName);
+	boolean updatePassword(String username, String password);
+	boolean updateUserType(String username, int type);
+	boolean deleteAccount(int id);
+	
+ }

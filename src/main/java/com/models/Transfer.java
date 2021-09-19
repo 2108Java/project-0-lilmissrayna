@@ -2,18 +2,12 @@ package com.models;
 
 public class Transfer {
 	private int id;
-	private Account accountOne;
-	private Account accountTwo;
+	private int accountOne;
+	private int accountTwo;
 	private double amount;
 	
-	Transfer (int id, Account accountOne, Account accountTwo, double amount){
+	public Transfer (int id, int accountOne, int accountTwo, double amount){
 		this.id = id;
-		this.accountOne = accountOne;
-		this.accountTwo = accountTwo;
-		this.amount = amount;
-	}
-	
-	Transfer (Account accountOne, Account accountTwo, double amount){
 		this.accountOne = accountOne;
 		this.accountTwo = accountTwo;
 		this.amount = amount;
@@ -23,19 +17,19 @@ public class Transfer {
 		super();
 	}
 
-	public Account getAccountOne() {
+	public int getAccountOne() {
 		return accountOne;
 	}
 
-	public void setAccountOne(Account accountOne) {
+	public void setAccountOne(int accountOne) {
 		this.accountOne = accountOne;
 	}
 
-	public Account getAccountTwo() {
+	public int getAccountTwo() {
 		return accountTwo;
 	}
 
-	public void setAccountTwo(Account accountTwo) {
+	public void setAccountTwo(int accountTwo) {
 		this.accountTwo = accountTwo;
 	}
 

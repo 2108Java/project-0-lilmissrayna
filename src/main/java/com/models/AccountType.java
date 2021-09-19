@@ -4,7 +4,7 @@ public class AccountType {
 	private int id;
 	private String name;
 	
-	AccountType(){
+	public AccountType(){
 		this.name = "";
 	}
 	
@@ -12,7 +12,7 @@ public class AccountType {
 		this.name = name;
 	}
 	
-	AccountType(int id, String name){
+	public AccountType(int id, String name){
 		this.id = id;
 		this.name = name;
 	}

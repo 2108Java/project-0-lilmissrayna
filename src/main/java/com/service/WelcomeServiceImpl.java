@@ -5,6 +5,7 @@ import com.repos.UserDAO;
 
 public class WelcomeServiceImpl implements WelcomeService {
 
+	
 	UserDAO database;
 	
 	public WelcomeServiceImpl(UserDAO database) {

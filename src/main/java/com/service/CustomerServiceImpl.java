@@ -1,61 +1,91 @@
 package com.service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import com.models.Account;
+import com.models.AccountType;
+import com.models.Transfer;
+import com.models.User;
+import com.repos.AccountDAO;
+import com.repos.AccountTypeDAO;
+import com.repos.TransferDAO;
+import com.repos.UserDAO;
 
 public class CustomerServiceImpl implements CustomerService {
 
-	Account database;
+	AccountDAO accountDatabase;
+	TransferDAO transferDatabase;
+	AccountTypeDAO typeDatabase;
+	UserDAO userDatabase;
 	
-	public CustomerServiceImpl(Account database) {
-		this.database = database;
+	public CustomerServiceImpl(AccountDAO accountDatabase, TransferDAO transferDatabase, AccountTypeDAO typeDatabase, UserDAO userDatabase) {
+		this.accountDatabase = accountDatabase;
+		this.transferDatabase = transferDatabase;
+		this.typeDatabase = typeDatabase;	
+		this.userDatabase = userDatabase;
+	}
+
+	@Override
+	public boolean applyForChecking(int userId, BigDecimal balance) {
+		return accountDatabase.insertAccount(userId, 1, balance);
+	}
+
+	@Override
+	public boolean applyForSavings(int userId, BigDecimal balance) {
+		return accountDatabase.insertAccount(userId, 2, balance);
+	}
+
+	@Override
+	public boolean applyForJoint(int userId, int secondUserId, BigDecimal balance) {
+		return accountDatabase.insertAccount(userId, secondUserId, 3, balance);
+	}
+
+	@Override
+	public boolean makeDeposit(int userId, int type, BigDecimal amount) {
+		return accountDatabase.updateBalance(userId, type, amount);
+	}
+
+	@Override
+	public boolean makeTransfer(int userId, int secondUserId, BigDecimal amount) {
+		// TODO Auto-generated method stub
+		return transferDatabase.insertTransfer(userId, secondUserId, amount);
+	}
+
+	@Override
+	public ArrayList<Transfer> checkforTransfer(int userId) {
+		return transferDatabase.selectAllTransfers(userId);
+	}
+
+	@Override
+	public ArrayList<Account> viewAllBalance(int userId) {
+		return accountDatabase.selectAllAccounts(userId);
+	}
+
+	@Override
+	public Account viewBalance(int userId, int type) {
+		return accountDatabase.selectAccount(userId, type);
+	}
+
+	@Override
+	public boolean makeWithdrawl(int userId, int type, BigDecimal amount) {
+		return accountDatabase.updateBalance(userId, type, amount);
+	}
+
+	@Override
+	public AccountType getAcountName(int type) {
+		return typeDatabase.selectAccountType(type);
 	}
 	
 	@Override
-	public boolean applyForChecking() {
+	public User getUserId(String username) {
 		// TODO Auto-generated method stub
-		return false;
+		return userDatabase.selectUser(username);
 	}
 
 	@Override
-	public boolean applyForSavings() {
+	public ArrayList<Account> viewJointBalance(int id) {
 		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean applyForJoint() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean makeDeposit(double amount) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean makeWithdrawl(double amount) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean makeTransfer(double amount, Account account) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean checkforTransfer() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public double viewBalance(Account account) {
-		return database.getBalance();
-
+		return accountDatabase.
 	}
 
 }

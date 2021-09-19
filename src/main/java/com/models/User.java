@@ -7,21 +7,6 @@ public class User {
 	private int type;
 	private boolean approved;
 	
-	public User(){
-		super();
-	}
-	
-	public User(String username, String password){
-		this.username = username;
-		this.password = password;
-	}
-	
-	public User(int id, String username, String password){
-		this.id = id;
-		this.username = username;
-		this.password = password;
-	}
-	
 	public User(int id, String username, String password, int type, boolean approved){
 		this.id = id;
 		this.username = username;

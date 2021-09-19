@@ -1,10 +1,14 @@
 package com.repos;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+
 import com.models.Transfer;
 
 public interface TransferDAO {
-	Transfer selectTransfer(Transfer transfer);
-	boolean updateTranfer(Transfer transfer);
-	boolean insertTransfer(Transfer transfer);
-	boolean deleteTransfer(int id);
+	ArrayList<Transfer> selectAllTransfers(int receiver);
+	ArrayList<Transfer> selectTransfer(int sender, int receiver);
+	boolean insertTransfer(int sender, int receiver, BigDecimal amount);
+	boolean deleteAllTransfers(int receiver);
+	boolean deleteTransfer(int sender, int receiver);
 }

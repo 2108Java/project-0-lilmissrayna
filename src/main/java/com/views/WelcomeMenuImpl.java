@@ -1,13 +1,27 @@
 package com.views;
 
 import java.util.Scanner;
-
 import com.models.User;
+import com.repos.AccountDAO;
+import com.repos.AccountDaoImpl;
+import com.repos.AccountTypeDAO;
+import com.repos.AccountTypeDaoImpl;
+import com.repos.TransferDAO;
+import com.repos.TransferDaoImpl;
+import com.repos.UserDAO;
+import com.repos.UserDaoImpl;
+import com.service.AdminService;
+import com.service.AdminServiceImpl;
+import com.service.CustomerService;
+import com.service.CustomerServiceImpl;
+import com.service.EmployeeService;
+import com.service.EmployeeServiceImpl;
 import com.service.WelcomeService;
 
 public class WelcomeMenuImpl implements WelcomeMenu {
 
 	WelcomeService service;
+	
 	
 	public WelcomeMenuImpl(WelcomeService service) {
 		this.service = service;
@@ -16,7 +30,6 @@ public class WelcomeMenuImpl implements WelcomeMenu {
 	@Override
 	public void display() {
 		
-		UserMenu menu;
 		boolean running = true;
 		Scanner sc = new Scanner(System.in);
 		do {
@@ -33,36 +46,20 @@ public class WelcomeMenuImpl implements WelcomeMenu {
 			
 			User currentUser = service.login(usernameLogin);
 			
+			
 			if(currentUser == null) {
 				System.out.println("User not found, please make sure you have entered the correct username.");
 				break;
-			} else if (passwordLogin != currentUser.getPassword()) {
+			} else if (!currentUser.getPassword().equals(passwordLogin)) {
+				System.out.println(passwordLogin + " " + currentUser.getPassword());
 				System.out.println("You have entered the incorrect password, try again.");
 				break;
 			} else if (currentUser.isApproved() != true) {
 				System.out.println("Your account has not been approved yet, please try again later.");
 				break;
 			}
-		
-			int currentType = currentUser.getType();
 			
-			switch(currentType) {
-			case 1:
-				menu = new CustomerMenu();
-				menu.display(currentUser);
-				break;
-			case 2:
-				menu = new EmployeeMenu();
-				menu.display(currentUser);
-				break;
-			case 3:
-				menu = new AdminMenu();
-				menu.display(currentUser);
-				break;
-			default:
-				System.out.println("Something went wrong!");
-				break;
-			}
+			login(currentUser);
 			
 			break;
 		case 2:
@@ -82,6 +79,7 @@ public class WelcomeMenuImpl implements WelcomeMenu {
 		case 3:
 			System.out.println("Thank you! Have a great day!");
 			running = false;
+			sc.close();
 			break;
 		default:
 			System.out.println("You have entered and invalid option.");
@@ -90,6 +88,38 @@ public class WelcomeMenuImpl implements WelcomeMenu {
 		}
 		}while(running);
 
+	}
+
+	private void login(User currentUser) {
+		AccountDAO accountDatabase = new AccountDaoImpl();
+		TransferDAO transferDatabase = new TransferDaoImpl();
+		AccountTypeDAO typeDatabase = new AccountTypeDaoImpl();
+		UserDAO userDatabase = new UserDaoImpl();
+		
+		switch(currentUser.getType()) {
+		case 1:
+			
+			CustomerService customerService = new CustomerServiceImpl(accountDatabase, 
+											transferDatabase, typeDatabase, userDatabase);
+			UserMenu customerMenu = new CustomerMenu(customerService);
+			customerMenu.display(currentUser);
+			break;
+		case 2:
+			EmployeeService employeeService = new EmployeeServiceImpl(accountDatabase, 
+											transferDatabase, typeDatabase, userDatabase);
+			UserMenu employeeMenu = new EmployeeMenu(employeeService);
+			employeeMenu.display(currentUser); 
+			break;
+		case 3:
+			AdminService adminService = new AdminServiceImpl(accountDatabase, 
+											transferDatabase, typeDatabase, userDatabase);
+			UserMenu adminMenu = new AdminMenu(adminService);
+			adminMenu.display(currentUser); 
+			break;
+		default:
+			System.out.println("Something went wrong!");
+			break;
+		}
 	}
 
 	@Override

@@ -1,18 +1,18 @@
 package com.views;
 
-import com.models.Account;
 import com.models.User;
+import com.service.AdminService;
 
 public class AdminMenu implements UserMenu {
 
-	@Override
-	public void options() {
-		// TODO Auto-generated method stub
-
+	AdminService adminService;
+	
+	public AdminMenu(AdminService adminService) {
+		this.adminService = adminService;
 	}
 
 	@Override
-	public void printAccount(Account account) {
+	public void options() {
 		// TODO Auto-generated method stub
 
 	}

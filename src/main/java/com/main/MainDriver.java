@@ -10,10 +10,10 @@ import com.views.WelcomeMenuImpl;
 public class MainDriver {
 
 	public static void main(String[] args) {
-
-		UserDAO database = new UserDaoImpl();
 		
-		WelcomeService service = new WelcomeServiceImpl(database);
+		UserDAO userDatabase = new UserDaoImpl();
+		
+		WelcomeService service = new WelcomeServiceImpl(userDatabase);
 		
 		WelcomeMenu mainMenu = new WelcomeMenuImpl(service);
 		

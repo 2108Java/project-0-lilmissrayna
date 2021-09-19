@@ -4,7 +4,7 @@ public class UserType {
 	private int id;
 	private String name;
 	
-	UserType(){
+	public UserType(){
 		this.name = "";
 	}
 	
@@ -12,7 +12,7 @@ public class UserType {
 		this.name = name;
 	}
 
-	UserType(int id, String name){
+	public UserType(int id, String name){
 		this.id = id;
 		this.name = name;
 	}

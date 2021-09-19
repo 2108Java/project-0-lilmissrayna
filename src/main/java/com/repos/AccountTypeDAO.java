@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import com.models.AccountType;
 
 public interface AccountTypeDAO {
-	AccountType selectAccountType();
+	AccountType selectAccountType(int id);
 	ArrayList<AccountType> selectAllAccountTypes();
-	boolean updateAccountType(AccountType type);
-	boolean insertAccountType(AccountType type);
-	boolean deleteAccountType();
+	boolean updateAccountType(int id, String type);
+	boolean insertAccountType(String type);
+	boolean deleteAccountType(int id);
 }
