@@ -1,18 +1,20 @@
 package com.models;
 
+import java.math.BigDecimal;
+
 public class Account {
 	private int id;
 	private int userPrimary;
 	private int userSecondary;
 	private int type;
-	private double balance;
+	private BigDecimal balance;
 	
-	public Account(int id, int userPrimary, int userSecondary, int type, double balance){
+	public Account(int id, int userPrimary, int userSecondary, int type, BigDecimal bigDecimal){
 		this.id = id;
 		this.userPrimary = userPrimary;
 		this.userSecondary = userSecondary;
 		this.type = type;
-		this.balance = balance;
+		this.balance = bigDecimal;
 	}
 	
 	public Account(){
@@ -43,11 +45,11 @@ public class Account {
 		this.type = type;
 	}
 
-	public double getBalance() {
+	public BigDecimal getBalance() {
 		return balance;
 	}
 
-	public void setBalance(double balance) {
+	public void setBalance(BigDecimal balance) {
 		this.balance = balance;
 	}
 

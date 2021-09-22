@@ -6,6 +6,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import com.models.Account;
 
@@ -17,7 +19,7 @@ public class AccountDaoImpl implements AccountDAO {
 	private String url = "jdbc:postgresql://" + dbLocation + "/postgres";
 
 	@Override
-	public ArrayList<Account> selectAllAccounts(int firstUser) {
+	public ArrayList<Account> selectAllUserAccounts(int firstUser) {
 		ArrayList<Account> allAccounts = new ArrayList<Account>();
 		try(Connection connection = DriverManager.getConnection(url, username, password)){
 			String sql = "SELECT * FROM accounts where user_one = ? or user_two = ?;";
@@ -30,11 +32,16 @@ public class AccountDaoImpl implements AccountDAO {
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {
-				allAccounts.add(new Account(rs.getInt("id"), 
-							rs.getInt("user_one"), 
-							rs.getInt("user_two"),
-							rs.getInt("account_type"),
-							rs.getDouble("balance")));	
+				try {
+					allAccounts.add(new Account(rs.getInt("id"), 
+								rs.getInt("user_one"), 
+								rs.getInt("user_two"),
+								rs.getInt("account_type"),
+								BigDecimal.valueOf(DecimalFormat.getCurrencyInstance().parse(rs.getString("balance")).doubleValue())));
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}	
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -43,10 +50,9 @@ public class AccountDaoImpl implements AccountDAO {
 			return allAccounts;
 	}
 
-	@SuppressWarnings("null")
 	@Override
-	public ArrayList<Account> selectAccount(int firstUser, int type) {
-		ArrayList<Account> accountOfType = null;
+	public Account selectAccount(int firstUser, int type) {
+		Account accountOfType = null;
 		try(Connection connection = DriverManager.getConnection(url, username, password)){
 			String sql = "SELECT * FROM accounts where account_type = ? and (user_one = ? or user_two = ?);";
 			
@@ -59,11 +65,16 @@ public class AccountDaoImpl implements AccountDAO {
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {
-				accountOfType.add(new Account(rs.getInt("id"), 
+				try {
+					accountOfType=new Account(rs.getInt("id"), 
 							rs.getInt("user_one"), 
 							rs.getInt("user_two"),
 							rs.getInt("account_type"),
-							rs.getDouble("balance")));	
+							BigDecimal.valueOf(DecimalFormat.getCurrencyInstance().parse(rs.getString("balance")).doubleValue()));
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -73,17 +84,15 @@ public class AccountDaoImpl implements AccountDAO {
 	}
 
 	@Override
-	public boolean updateBalance(int firstUser, int type, BigDecimal amount) {
+	public boolean updateBalance(int id, BigDecimal amount) {
 		boolean success = false;
 		try(Connection connection = DriverManager.getConnection(url, username, password)){
-			String sql = "update accounts set balance = ? where user_one = ? and account_type = ?";
+			String sql = "update accounts set balance = ? where id = ?;";
 			
 			PreparedStatement ps = connection.prepareStatement(sql);
 			
 			ps.setBigDecimal(1, amount);
-			ps.setInt(2, firstUser);
-			ps.setInt(3, firstUser);
-			ps.setInt(4, type);
+			ps.setInt(2, id);
 			
 			success = ps.execute();
 			
@@ -178,17 +187,51 @@ public class AccountDaoImpl implements AccountDAO {
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {
-				userAccount = new Account(rs.getInt("id"), 
+				try {
+					userAccount = new Account(rs.getInt("id"), 
 							rs.getInt("user_one"), 
 							rs.getInt("user_two"),
 							rs.getInt("account_type"),
-							rs.getDouble("balance"));	
+							BigDecimal.valueOf(DecimalFormat.getCurrencyInstance().parse(rs.getString("balance")).doubleValue()));
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}	
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 			return userAccount;
+	}
+
+	@Override
+	public ArrayList<Account> selectAllAccounts() {
+		ArrayList<Account> accounts = new ArrayList<>();
+		try(Connection connection = DriverManager.getConnection(url, username, password)){
+			String sql = "SELECT * FROM accounts;";
+			
+			PreparedStatement ps = connection.prepareStatement(sql);
+				
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				try {
+					accounts.add(new Account(rs.getInt("id"), 
+								rs.getInt("user_one"), 
+								rs.getInt("user_two"),
+								rs.getInt("account_type"),
+								BigDecimal.valueOf(DecimalFormat.getCurrencyInstance().parse(rs.getString("balance")).doubleValue())));
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}	
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			return accounts;
 	}
 
 	

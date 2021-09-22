@@ -29,7 +29,7 @@ public class AccountTypeDaoImpl implements AccountTypeDAO {
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
 			accountType = new AccountType(rs.getInt("id"), 
-							rs.getString("type_name"));
+							rs.getString("account_type_name"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

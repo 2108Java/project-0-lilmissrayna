@@ -10,6 +10,7 @@ import com.repos.AccountDAO;
 import com.repos.AccountTypeDAO;
 import com.repos.TransferDAO;
 import com.repos.UserDAO;
+import com.repos.UserTypeDAO;
 
 public class CustomerServiceImpl implements CustomerService {
 
@@ -17,12 +18,14 @@ public class CustomerServiceImpl implements CustomerService {
 	TransferDAO transferDatabase;
 	AccountTypeDAO typeDatabase;
 	UserDAO userDatabase;
+	UserTypeDAO userTypeDatabase;
 	
-	public CustomerServiceImpl(AccountDAO accountDatabase, TransferDAO transferDatabase, AccountTypeDAO typeDatabase, UserDAO userDatabase) {
+	public CustomerServiceImpl(AccountDAO accountDatabase, TransferDAO transferDatabase, AccountTypeDAO typeDatabase, UserDAO userDatabase, UserTypeDAO userTypeDatabase) {
 		this.accountDatabase = accountDatabase;
 		this.transferDatabase = transferDatabase;
 		this.typeDatabase = typeDatabase;	
 		this.userDatabase = userDatabase;
+		this.userTypeDatabase = userTypeDatabase;
 	}
 
 	@Override
@@ -41,13 +44,12 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public boolean makeDeposit(int userId, int type, BigDecimal amount) {
-		return accountDatabase.updateBalance(userId, type, amount);
+	public boolean makeDeposit(int userId, BigDecimal amount) {
+		return accountDatabase.updateBalance(userId, amount);
 	}
 
 	@Override
 	public boolean makeTransfer(int userId, int secondUserId, BigDecimal amount) {
-		// TODO Auto-generated method stub
 		return transferDatabase.insertTransfer(userId, secondUserId, amount);
 	}
 
@@ -58,7 +60,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public ArrayList<Account> viewAllBalance(int userId) {
-		return accountDatabase.selectAllAccounts(userId);
+		return accountDatabase.selectAllUserAccounts(userId);
 	}
 
 	@Override
@@ -67,8 +69,8 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public boolean makeWithdrawl(int userId, int type, BigDecimal amount) {
-		return accountDatabase.updateBalance(userId, type, amount);
+	public boolean makeWithdrawl(int userId, BigDecimal amount) {
+		return accountDatabase.updateBalance(userId, amount);
 	}
 
 	@Override
@@ -78,14 +80,31 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	@Override
 	public User getUserId(String username) {
-		// TODO Auto-generated method stub
 		return userDatabase.selectUser(username);
 	}
 
 	@Override
-	public ArrayList<Account> viewJointBalance(int id) {
+	public User getUserByAccountId(int accountOne) {
 		// TODO Auto-generated method stub
-		return accountDatabase.
+		return userDatabase.selectUserByAccountId(accountOne);
+	}
+
+	@Override
+	public Account getAccount(int accountTwo) {
+		// TODO Auto-generated method stub
+		return accountDatabase.selectAccountById(accountTwo);
+	}
+
+	@Override
+	public boolean deleteTransfer(int id) {
+		// TODO Auto-generated method stub
+		return transferDatabase.deleteTransfer(id);
+	}
+
+	@Override
+	public User getUserById(int id) {
+		// TODO Auto-generated method stub
+		return userDatabase.selectUserById(id);
 	}
 
 }

@@ -20,7 +20,7 @@ public class TransferDaoImpl implements TransferDAO {
 	public ArrayList<Transfer> selectAllTransfers(int receiver) {
 		ArrayList<Transfer> allTransfers = new ArrayList<Transfer>();
 		try(Connection connection = DriverManager.getConnection(url, username, password)){
-			String sql = "select * from transfers where recieving = ?;";
+			String sql = "select * from transfers where receiving = ?;";
 			
 			PreparedStatement ps = connection.prepareStatement(sql);
 			
@@ -29,9 +29,9 @@ public class TransferDaoImpl implements TransferDAO {
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
 				allTransfers.add(new Transfer(rs.getInt("id"), 
-							rs.getInt("user_one"), 
-							rs.getInt("user_two"),
-							rs.getInt("balance")));
+							rs.getInt("sending"), 
+							rs.getInt("receiving"),
+							rs.getDouble("amount")));
 			}
 			
 		} catch (SQLException e) {
@@ -69,13 +69,32 @@ public class TransferDaoImpl implements TransferDAO {
 	public boolean insertTransfer(int sender, int receiver, BigDecimal amount) {
 		boolean success = false;
 		try(Connection connection = DriverManager.getConnection(url, username, password)){
-			String sql = "insert into transfers(sending,receiving,balance) values(?,?,?);";
+			String sql = "insert into transfers(sending,receiving,amount) values(?,?,?);";
 			
 			PreparedStatement ps = connection.prepareStatement(sql);
 			
 			ps.setInt(1, sender);
 			ps.setInt(2, receiver);
-			ps.setInt(2, receiver);
+			ps.setBigDecimal(3, amount);
+			
+			success = ps.execute();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return success;
+	}
+	
+	@Override
+	public boolean deleteTransfer(int id) {
+		boolean success = false;
+		try(Connection connection = DriverManager.getConnection(url, username, password)){
+			String sql = "delete from transfers where id = ?";
+			
+			PreparedStatement ps = connection.prepareStatement(sql);
+			
+			ps.setInt(1, id);
 			
 			success = ps.execute();
 			
@@ -86,41 +105,27 @@ public class TransferDaoImpl implements TransferDAO {
 		return success;
 	}
 	@Override
-	public boolean deleteAllTransfers(int receiver) {
-		boolean success = false;
+	public ArrayList<Transfer> selectAlltransfersTotal() {
+		ArrayList<Transfer> transfersPending = new ArrayList<Transfer>();
 		try(Connection connection = DriverManager.getConnection(url, username, password)){
-			String sql = "delete from transfers where receiving = ?";
+			String sql = "select * from transfers;";
 			
 			PreparedStatement ps = connection.prepareStatement(sql);
+	
 			
-			ps.setInt(1, receiver);
-			
-			success = ps.execute();
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				transfersPending.add(new Transfer(rs.getInt("id"), 
+							rs.getInt("sending"), 
+							rs.getInt("receiving"),
+							rs.getDouble("amount")));
+			}
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
-		return success;
-	}
-	@Override
-	public boolean deleteTransfer(int sender, int receiver) {
-		boolean success = false;
-		try(Connection connection = DriverManager.getConnection(url, username, password)){
-			String sql = "delete from transfers where sending = ? and receiving = ?";
-			
-			PreparedStatement ps = connection.prepareStatement(sql);
-			
-			ps.setInt(1, sender);
-			ps.setInt(2, receiver);
-			
-			success = ps.execute();
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-		return success;
+		return transfersPending;
 	}
 	
 	

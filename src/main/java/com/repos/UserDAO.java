@@ -1,5 +1,7 @@
 package com.repos;
 
+import java.util.ArrayList;
+
 import com.models.User;
 
 public interface UserDAO {
@@ -11,6 +13,9 @@ public interface UserDAO {
 	boolean insertUser(String username, String password);
 	boolean updateApproval(String username, boolean approval);
 	boolean insertUser(String username, String password, int userType, boolean approved);
+	User selectUserByAccountId(int accountOne);
+	User selectUserById(int accountOne);
+	ArrayList<User> selectAllUsers();
 	
 	
 }

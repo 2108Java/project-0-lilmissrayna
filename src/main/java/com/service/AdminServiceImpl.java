@@ -1,6 +1,7 @@
 package com.service;
 
 import com.repos.UserDAO;
+import com.repos.UserTypeDAO;
 import com.repos.AccountDAO;
 import com.repos.AccountTypeDAO;
 import com.repos.TransferDAO;
@@ -12,8 +13,8 @@ public class AdminServiceImpl extends EmployeeServiceImpl implements AdminServic
 	AccountTypeDAO typeDatabase;
 	UserDAO userDatabase;
 
-	public AdminServiceImpl(AccountDAO accountDatabase,TransferDAO transferDatabase, AccountTypeDAO typeDatabase, UserDAO userDatabase) {
-		super(accountDatabase, transferDatabase, typeDatabase, userDatabase);
+	public AdminServiceImpl(AccountDAO accountDatabase, TransferDAO transferDatabase, AccountTypeDAO typeDatabase, UserDAO userDatabase, UserTypeDAO userTypeDatabase) {
+		super(accountDatabase, transferDatabase, typeDatabase, userDatabase, userTypeDatabase);
 	}
 
 	@Override

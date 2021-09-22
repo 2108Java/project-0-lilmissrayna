@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+
 import com.models.User;
 
 public class UserDaoImpl implements UserDAO {
@@ -187,6 +189,78 @@ public class UserDaoImpl implements UserDAO {
 			e.printStackTrace();
 		}		
 		return success;
+	}
+
+	@Override
+	public User selectUserByAccountId(int accountOne) {
+		User selectedUser = null;
+		try(Connection connection = DriverManager.getConnection(url, username, password)){
+			String sql = "SELECT * FROM users where id = (select user_one from accounts where id = ?);";
+			
+			PreparedStatement ps = connection.prepareStatement(sql);
+			
+			ps.setInt(1, accountOne);
+			
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+			selectedUser = new User(rs.getInt("id"), 
+							rs.getString("username"), 
+							rs.getString("user_password"),
+							rs.getInt("user_type"),
+							rs.getBoolean("approved"));	
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			return selectedUser;
+	}
+	
+	public User selectUserById(int id) {
+		User selectedUser = null;
+		try(Connection connection = DriverManager.getConnection(url, username, password)){
+			String sql = "SELECT * FROM users where id = ?;";
+			
+			PreparedStatement ps = connection.prepareStatement(sql);
+			
+			ps.setInt(1, id);
+			
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+			selectedUser = new User(rs.getInt("id"), 
+							rs.getString("username"), 
+							rs.getString("user_password"),
+							rs.getInt("user_type"),
+							rs.getBoolean("approved"));	
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			return selectedUser;
+	}
+
+	@Override
+	public ArrayList<User> selectAllUsers() {
+		ArrayList<User> allUsers = new ArrayList<>();
+		try(Connection connection = DriverManager.getConnection(url, username, password)){
+			String sql = "SELECT * FROM users;";
+			
+			PreparedStatement ps = connection.prepareStatement(sql);
+			
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				allUsers.add(new User(rs.getInt("id"), 
+							rs.getString("username"), 
+							rs.getString("user_password"),
+							rs.getInt("user_type"),
+							rs.getBoolean("approved")));	
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			return allUsers;
 	}
 	
 

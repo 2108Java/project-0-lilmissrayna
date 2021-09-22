@@ -10,6 +10,8 @@ import com.repos.TransferDAO;
 import com.repos.TransferDaoImpl;
 import com.repos.UserDAO;
 import com.repos.UserDaoImpl;
+import com.repos.UserTypeDAO;
+import com.repos.UserTypeDaoImpl;
 import com.service.AdminService;
 import com.service.AdminServiceImpl;
 import com.service.CustomerService;
@@ -95,24 +97,25 @@ public class WelcomeMenuImpl implements WelcomeMenu {
 		TransferDAO transferDatabase = new TransferDaoImpl();
 		AccountTypeDAO typeDatabase = new AccountTypeDaoImpl();
 		UserDAO userDatabase = new UserDaoImpl();
+		UserTypeDAO userTypeDatabase = new UserTypeDaoImpl();
 		
 		switch(currentUser.getType()) {
 		case 1:
 			
 			CustomerService customerService = new CustomerServiceImpl(accountDatabase, 
-											transferDatabase, typeDatabase, userDatabase);
+											transferDatabase, typeDatabase, userDatabase, userTypeDatabase);
 			UserMenu customerMenu = new CustomerMenu(customerService);
 			customerMenu.display(currentUser);
 			break;
 		case 2:
 			EmployeeService employeeService = new EmployeeServiceImpl(accountDatabase, 
-											transferDatabase, typeDatabase, userDatabase);
+											transferDatabase, typeDatabase, userDatabase, userTypeDatabase);
 			UserMenu employeeMenu = new EmployeeMenu(employeeService);
 			employeeMenu.display(currentUser); 
 			break;
 		case 3:
 			AdminService adminService = new AdminServiceImpl(accountDatabase, 
-											transferDatabase, typeDatabase, userDatabase);
+											transferDatabase, typeDatabase, userDatabase, userTypeDatabase);
 			UserMenu adminMenu = new AdminMenu(adminService);
 			adminMenu.display(currentUser); 
 			break;
@@ -133,6 +136,8 @@ public class WelcomeMenuImpl implements WelcomeMenu {
 		System.out.println("(1) Login");
 		System.out.println("(2) Register");
 		System.out.println("(3) Quit");
+		System.out.println();
+		System.out.println();
 
 	}
 
