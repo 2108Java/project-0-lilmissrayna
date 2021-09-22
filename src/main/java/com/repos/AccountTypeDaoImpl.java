@@ -7,10 +7,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 import com.models.AccountType;
 
 public class AccountTypeDaoImpl implements AccountTypeDAO {
 
+	private static final Logger BankLog = Logger.getLogger(AccountTypeDaoImpl.class);
 	private String dbLocation = "localhost";
 	private String username = "postgres";
 	private String password = "Babygirl913!";
@@ -18,6 +21,7 @@ public class AccountTypeDaoImpl implements AccountTypeDAO {
 	
 	@Override
 	public AccountType selectAccountType(int id) {
+		BankLog.info("Selecting account type.");
 		AccountType accountType = null;
 		try(Connection connection = DriverManager.getConnection(url, username, password)){
 			String sql = "SELECT * FROM account_types where id = ?;";
@@ -31,8 +35,9 @@ public class AccountTypeDaoImpl implements AccountTypeDAO {
 			accountType = new AccountType(rs.getInt("id"), 
 							rs.getString("account_type_name"));
 			}
+			BankLog.info("Successfully selected account");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			BankLog.warn(e.toString());
 			e.printStackTrace();
 		}
 			return accountType;
@@ -51,50 +56,55 @@ public class AccountTypeDaoImpl implements AccountTypeDAO {
 							rs.getString("type_name")));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			BankLog.warn(e.toString());
 			e.printStackTrace();
 		}
 			return allAccountTypes;
 	}
 	@Override
 	public boolean updateAccountType(int id, String type) {
+		BankLog.info("Updating account type.");
 		boolean success = false;
 		try(Connection connection = DriverManager.getConnection(url, username, password)){
-			String sql = "update account_types set type_name to ? where id = ?";
+			String sql = "update account_types set account_type_name to ? where id = ?";
 			
 			PreparedStatement ps = connection.prepareStatement(sql);
 			
 			ps.setString(1, type);
 			ps.setInt(2, id);
 			
-			success = ps.execute();
-			
+			ps.execute();
+			success = true;
+			BankLog.info("Successfully updated account type.");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			BankLog.warn(e.toString());
 			e.printStackTrace();
 		}		
 		return success;
 	}
 	@Override
 	public boolean insertAccountType(String type) {
+		BankLog.info("Inserting account type.");
 		boolean success = false;
 		try(Connection connection = DriverManager.getConnection(url, username, password)){
-			String sql = "insert into account_types(type_name) values(?);";
+			String sql = "insert into account_types(account_type_name) values(?);";
 			
 			PreparedStatement ps = connection.prepareStatement(sql);
 			
 			ps.setString(1, type);
 			
-			success = ps.execute();
-			
+			ps.execute();
+			success = true;
+			BankLog.info("Successfully inserted account type.");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			BankLog.warn(e.toString());
 			e.printStackTrace();
 		}		
 		return success;
 	}
 	@Override
 	public boolean deleteAccountType(int id) {
+		BankLog.info("Deleting account type.");
 		boolean success = false;
 		try(Connection connection = DriverManager.getConnection(url, username, password)){
 			String sql = "delete from account_types where id = ?";
@@ -103,10 +113,11 @@ public class AccountTypeDaoImpl implements AccountTypeDAO {
 			
 			ps.setInt(1, id);
 			
-			success = ps.execute();
-			
+			ps.execute();
+			success = true;
+			BankLog.info("Successfully deleted account type.");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			BankLog.warn(e.toString());
 			e.printStackTrace();
 		}		
 		return success;

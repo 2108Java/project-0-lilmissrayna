@@ -3,6 +3,8 @@ package com.views;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import org.apache.log4j.Logger;
+
 import com.models.Account;
 import com.models.AccountType;
 import com.models.User;
@@ -11,6 +13,7 @@ import com.service.AdminService;
 
 public class AdminMenu implements UserMenu {
 	
+	private static final Logger BankLog = Logger.getLogger(AdminMenu.class);
 	AdminService service;
 	
 	public AdminMenu(AdminService service) {
@@ -19,6 +22,7 @@ public class AdminMenu implements UserMenu {
 
 	@Override
 	public void options() {
+		BankLog.info("Showing options.");
 		System.out.println("What would you like to do?");
 		System.out.println("1)Add new user");
 		System.out.println("2)Delete user");
@@ -27,19 +31,20 @@ public class AdminMenu implements UserMenu {
 		System.out.println("5)Update user type");
 		System.out.println("6)Delete account");
 		System.out.println("7)Quit");
+		System.out.println();
 
 	}
 
 	@Override
 	public void display(User user) {
+		BankLog.info("Running admin display");
 		System.out.println("Hello " + user.getUsername() + "!");
 		boolean running = true;
-
+		System.out.println();
 		while (running) {
 			options();
 			Scanner sc = new Scanner(System.in);
 			int choice = Integer.parseInt(sc.nextLine());
-			System.out.println();
 			System.out.println();
 
 			switch (choice) {
@@ -62,11 +67,15 @@ public class AdminMenu implements UserMenu {
 				deleteAccount(sc);
 				break;
 			case 7:
+				BankLog.info("Logging out.");
 				System.out.println("Thank you for working for us!");
+				System.out.println();
 				running = false;
 				break;
 			default:
+				BankLog.warn("Invalid admin menu option.");
 				System.out.println("Invalid input, try again!");
+				System.out.println();
 				break;
 			}
 		}
@@ -74,6 +83,7 @@ public class AdminMenu implements UserMenu {
 	}
 
 	private void deleteAccount(Scanner sc) {
+		BankLog.info("Deleting account.");
 		ArrayList<Account> allAccounts = service.viewAllAccounts();
 		User primary;
 		User secondary;
@@ -90,23 +100,26 @@ public class AdminMenu implements UserMenu {
 			System.out.println("Balance: $" + acc.getBalance());
 
 			System.out.println();
-			System.out.println();
 		}
 		
 		System.out.println("Which account would you like to delete? (Enter the account ID)");
 		int deleteAccount = Integer.parseInt(sc.nextLine());
 		service.deleteAccount(deleteAccount);
-		
+		System.out.println();
 		System.out.println("Account Deleted!");
+		System.out.println();
 		
 	}
 
 	private void updateUserType(Scanner sc) {
+		BankLog.info("Updating user type.");
 		System.out.println("Enter old username: ");
 		String userName = sc.nextLine();
+		System.out.println();
+		
 		System.out.println("Enter new type: ");
 		int newType = Integer.parseInt(sc.nextLine());
-		
+		System.out.println();
 		
 		service.updateUserType(userName, newType);
 		
@@ -115,11 +128,14 @@ public class AdminMenu implements UserMenu {
 	}
 
 	private void updatePassword(Scanner sc) {
+		BankLog.info("Updating user password.");
 		System.out.println("Enter username: ");
 		String currentName = sc.nextLine();
+		System.out.println();
+		
 		System.out.println("Enter new password: ");
 		String newPassword = sc.nextLine();
-		
+		System.out.println();
 		
 		service.updatePassword(currentName, newPassword);
 		
@@ -128,6 +144,7 @@ public class AdminMenu implements UserMenu {
 	}
 
 	private void updateUsername(Scanner sc) {
+		BankLog.info("Updating username.");
 		System.out.println("Enter old username: ");
 		String oldName = sc.nextLine();
 		System.out.println("Enter new username: ");
@@ -141,6 +158,7 @@ public class AdminMenu implements UserMenu {
 	}
 
 	private void deleteUser(Scanner sc) {
+		BankLog.info("Deleting user.");
 		ArrayList<User> allUsers = service.getAllCustomers();
 		for (User userList : allUsers) {
 			UserType userType = service.getUserType(userList.getType());
@@ -162,6 +180,7 @@ public class AdminMenu implements UserMenu {
 	}
 
 	private void addUser(Scanner sc) {
+		BankLog.info("Adding user.");
 		System.out.println("Enter username: ");
 		String username = sc.nextLine();
 		System.out.println("Enter password: ");

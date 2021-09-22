@@ -27,7 +27,7 @@ public class EmployeeServiceImpl extends CustomerServiceImpl implements Employee
 	public void viewTransactionLog() throws IOException {
 		BufferedReader in;
 		try {
-			in = new BufferedReader(new FileReader("C:\\\\Users\\\\lilmi\\\\source\\\\repos\\\\Revature\\\\Project 0\\\\project-0-lilmissrayna\\\\src\\\\main\\\\resources\\\\banklogs.log"));
+			in = new BufferedReader(new FileReader("C:\\Users\\lilmi\\source\\repos\\Revature\\Project 0\\project-0-lilmissrayna\\src\\main\\resources\\banklogs.log"));
 			String line = in.readLine();
 			while(line != null)
 			{

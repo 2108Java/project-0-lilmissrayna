@@ -3,6 +3,7 @@ package com.models;
 import java.math.BigDecimal;
 
 public class Account {
+	
 	private int id;
 	private int userPrimary;
 	private int userSecondary;
